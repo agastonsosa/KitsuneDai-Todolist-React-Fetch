@@ -44,31 +44,23 @@ const Tasklist = () => {
       });
   };
 
-  const deleteTask = (index) => {
-    const updatedTasks = [...todos];
-    updatedTasks.splice(index, 1);
-    setTodos(updatedTasks);
+  const deleteTask = (index) => { 
+    const updatedTasks = [...todos]; // Se crea una copia del array 'todos' utilizando spread operator y se guarda en 'updatedTasks'
+    updatedTasks.splice(index, 1); // Se elimina un elemento del array 'updatedTasks' en la posición 'index'
+    setTodos(updatedTasks); // Se actualiza el estado de 'todos' con el nuevo array 'updatedTasks'
   
-    fetch('https://playground.4geeks.com/apis/fake/todos/user/KitsuneDai', {
-      method: "PUT",
-      body: JSON.stringify(updatedTasks),
-      headers: {
-        "Content-Type": "application/json"
-      }
+    fetch('https://playground.4geeks.com/apis/fake/todos/user/KitsuneDai', { 
+        method: "PUT", 
+        body: JSON.stringify(updatedTasks), // Se convierte el array 'updatedTasks' a formato JSON y se envía como cuerpo de la solicitud
+        headers: {
+            "Content-Type": "application/json" 
+        }
     })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('La solicitud no se pudo completar.');
-      }
-      return response.json();
-    })
-    .then(data => {
-      // Manejar la respuesta si es necesario
-    })
-    .catch(error => {
-      console.error(error);
+    .catch(error => { 
+        console.error('Error al realizar la solicitud:', error);
     });
-  };
+};
+
  
   // const deleteTask = (taskId) => {
   //   fetch( urlTodos , {
