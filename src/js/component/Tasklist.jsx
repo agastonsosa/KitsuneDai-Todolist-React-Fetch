@@ -44,19 +44,44 @@ const Tasklist = () => {
       });
   };
 
-
-  const deleteTask = (taskId) => {
-    fetch( urlTodos , {
-      method: "DELETE",
+  const deleteTask = (index) => {
+    const updatedTasks = [...todos];
+    updatedTasks.splice(index, 1);
+    setTodos(updatedTasks);
+  
+    fetch('https://playground.4geeks.com/apis/fake/todos/user/KitsuneDai', {
+      method: "PUT",
+      body: JSON.stringify(updatedTasks),
+      headers: {
+        "Content-Type": "application/json"
+      }
     })
-      .then(() => {
-        setTodos(todos.filter((todo) => todo.id !== taskId));
-        console.log("Eliminar:", taskId);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('La solicitud no se pudo completar.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Manejar la respuesta si es necesario
+    })
+    .catch(error => {
+      console.error(error);
+    });
   };
+ 
+  // const deleteTask = (taskId) => {
+  //   fetch( urlTodos , {
+  //     method: "DELETE",
+  //   })
+  //     .then(() => {
+  //       setTodos(todos.filter((todo) => todo.id !== taskId));
+  //       console.log("Eliminar:", taskId);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
 
   const buttonYes =() => {
     fetch("https://playground.4geeks.com/apis/fake/todos/user/KitsuneDai", {
@@ -64,7 +89,7 @@ const Tasklist = () => {
     })
     .then (()=>{
       setTodos([]);
-      console.log("Todas las tareas eliminadas");
+      console.log("Todas las tareas eliminadas Y EL USUARIO!!!");
     })
     .catch((err) => {
       console.err(err);
@@ -94,11 +119,11 @@ const Tasklist = () => {
             </input>
         </li>
 
-        {todos.map((todo) => (
-          //Añado un key que se genere para cada child de forma única.
-          <li key={`task-${todo.label}`} className="tasklist">  
+        {todos.map((todo, index) => (
+          //EL KEY DEL <li> sera el index del array!
+          <li key={index} className="tasklist">  
             {todo.label}
-            <span onClick={() => deleteTask(todo.id)} className="tasklist"><RiDeleteBinLine className="icon" /></span>
+            <span onClick={() => deleteTask(index)} className="tasklist"><RiDeleteBinLine className="icon" /></span>
           </li>
         ))}
         
